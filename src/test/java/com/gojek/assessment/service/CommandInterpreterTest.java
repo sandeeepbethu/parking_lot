@@ -6,7 +6,6 @@ import com.gojek.assessment.model.Vehicle;
 import org.junit.Before;
 import org.junit.Test;
 
-import javax.sound.sampled.Line;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +33,35 @@ public class CommandInterpreterTest {
         List<LineCommand> lineCommandList = new ArrayList<>();
         lineCommandList.add(createParking("2"));
         lineCommandList.add(park());
+
+        commandInterpreter.executeFileCommands(lineCommandList);
+    }
+
+    @Test
+    public void executeFileCommands_ParkingFull_Success() {
+        List<LineCommand> lineCommandList = new ArrayList<>();
+        lineCommandList.add(createParking("1"));
+        lineCommandList.add(park());
+        lineCommandList.add(park());
+
+        commandInterpreter.executeFileCommands(lineCommandList);
+    }
+
+    @Test
+    public void executeFileCommands_ParkMultiple_Success() {
+        List<LineCommand> lineCommandList = new ArrayList<>();
+        lineCommandList.add(createParking("2"));
+        lineCommandList.add(park());
+        lineCommandList.add(park());
+
+        commandInterpreter.executeFileCommands(lineCommandList);
+    }
+
+    @Test
+    public void executeFileCommands_DuplicateParkingLotCreation_Success() {
+        List<LineCommand> lineCommandList = new ArrayList<>();
+        lineCommandList.add(createParking("2"));
+        lineCommandList.add(createParking("2"));
 
         commandInterpreter.executeFileCommands(lineCommandList);
     }

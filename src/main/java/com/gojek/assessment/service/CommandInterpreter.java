@@ -29,10 +29,13 @@ public class CommandInterpreter {
             switch (lineCommand.getCommand()){
                 case StaticReferences
                         .CREATE_PARKING_LOT :
-                    bookKeeper.setCapacity(Integer.parseInt(lineCommand.getDynamic_input()));
-                    bookKeeper.setFree_slots(Integer.parseInt(lineCommand.getDynamic_input()));
-                    System.out.println("Created a parking lot with : " + lineCommand.getDynamic_input() + " slots");
-                    slotSequenceGenerator();
+                    if(bookKeeper.getCapacity() == 0) {
+                        bookKeeper.setCapacity(Integer.parseInt(lineCommand.getDynamic_input()));
+                        bookKeeper.setFree_slots(Integer.parseInt(lineCommand.getDynamic_input()));
+                        System.out.println("Created a parking lot with : " + lineCommand.getDynamic_input() + " slots");
+                        slotSequenceGenerator();
+                    } else
+                        System.out.println("Parking lot is already created");
                     break;
                 case StaticReferences
                         .PARK:
@@ -136,7 +139,7 @@ public class CommandInterpreter {
         System.out.println("Slot No.  Registration No    Colour");
         for (Vehicle vehicle:
              bookKeeper.getVehicle_list()) {
-            System.out.println(vehicle.getSlot() + "         " + vehicle.getRegistration_number() + "          " + vehicle.getColor());
+            System.out.println(vehicle.getSlot() + "         " + vehicle.getRegistration_number() + "   " + vehicle.getColor());
         }
     }
 }
