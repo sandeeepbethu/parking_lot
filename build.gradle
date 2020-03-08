@@ -6,7 +6,6 @@ plugins {
 
 jar.enabled(true)
 group 'com.gojek.assessment'
-version '1.0'
 sourceCompatibility = 1.8
 
 repositories {
