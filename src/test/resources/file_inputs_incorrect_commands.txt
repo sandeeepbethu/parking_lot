@@ -1,0 +1,4 @@
+create_parking_lot 6
+reverse
+park KA-01-HH-1234 White
+park car KA-01-HH-1234 White Left
