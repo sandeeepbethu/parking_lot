@@ -2,7 +2,6 @@ package com.gojek.assessment.service;
 
 import com.gojek.assessment.common.StaticReferences;
 import com.gojek.assessment.model.LineCommand;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -32,9 +31,18 @@ public class CoreServiceTest {
         List<LineCommand> lineCommandList = mock(ArrayList.class);
         doNothing().when(commandInterpreter).executeFileCommands(lineCommandList);
 
-        String actual_output = coreService.loadInput();
+        coreService.loadInput();
+    }
 
-        Assert.assertEquals("success", actual_output);
+    @Test
+    public void loadInput_SingularCommand() throws IOException {
+        InputStream inputStream = new ByteArrayInputStream("create_parking_lot 1".getBytes());
+        System.setIn(inputStream);
+
+        List<LineCommand> lineCommandList = mock(ArrayList.class);
+        doNothing().when(commandInterpreter).executeFileCommands(lineCommandList);
+
+        coreService.loadInput();
     }
 
     @Test
@@ -45,9 +53,7 @@ public class CoreServiceTest {
         List<LineCommand> lineCommandList = mock(ArrayList.class);
         doNothing().when(commandInterpreter).executeFileCommands(lineCommandList);
 
-        String actual_output = coreService.loadInput();
-
-        Assert.assertEquals("success", actual_output);
+        coreService.loadInput();
     }
 
     @Test
@@ -58,9 +64,7 @@ public class CoreServiceTest {
         List<LineCommand> lineCommandList = mock(ArrayList.class);
         doNothing().when(commandInterpreter).executeFileCommands(lineCommandList);
 
-        String actual_output = coreService.loadInput();
-
-        Assert.assertEquals("success", actual_output);
+        coreService.loadInput();
     }
 
     @Test
@@ -68,9 +72,7 @@ public class CoreServiceTest {
         InputStream inputStream = new ByteArrayInputStream("".getBytes());
         System.setIn(inputStream);
 
-        String actual_output = coreService.loadInput();
-
-        Assert.assertEquals("fail", actual_output);
+        coreService.loadInput();
     }
 
     @Test
@@ -78,8 +80,6 @@ public class CoreServiceTest {
         InputStream inputStream = new ByteArrayInputStream(StaticReferences.FILE_EMPTY.getBytes());
         System.setIn(inputStream);
 
-        String actual_output = coreService.loadInput();
-
-        Assert.assertEquals("Blank input file", actual_output);
+        coreService.loadInput();
     }
 }

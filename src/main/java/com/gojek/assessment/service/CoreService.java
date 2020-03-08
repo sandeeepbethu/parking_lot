@@ -5,6 +5,7 @@ import com.gojek.assessment.model.LineCommand;
 import com.gojek.assessment.model.Vehicle;
 import org.springframework.stereotype.Service;
 
+import javax.sound.sampled.Line;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -29,42 +30,50 @@ public class CoreService {
         this.commandInterpreter = commandInterpreter;
     }
 
-    public String loadInput() throws IOException {
+    public void loadInput() throws IOException {
         FileReader fileReader = null;
         BufferedReader bufferedReader = null;
-        try {
-            Scanner scanner = new Scanner(System.in);
-            System.out.print("Enter file name: ");
-            String file_name = scanner.next();
-            fileReader = new FileReader(file_name);
-            bufferedReader = new BufferedReader(fileReader);
-            String currentLine;
-            LineCommand lineCommand;
-            List<LineCommand> lineCommandList = new ArrayList<>();
 
-            while ((currentLine = bufferedReader.readLine()) != null) {
-                if((lineCommand = processInputFile(currentLine)) != null)
-                    lineCommandList.add(lineCommand);
+            try {
+                Scanner scanner = new Scanner(System.in).useDelimiter("\n");
+                while (scanner.hasNext()) {
+                    String input = scanner.nextLine();
+                    List<LineCommand> lineCommandList = new ArrayList<>();
+
+                    if(input.contains(".txt")) {
+                        fileReader = new FileReader(input);
+                        bufferedReader = new BufferedReader(fileReader);
+                        String currentLine;
+                        LineCommand lineCommand;
+
+                        while ((currentLine = bufferedReader.readLine()) != null) {
+                            if((lineCommand = processInputFile(currentLine)) != null)
+                                lineCommandList.add(lineCommand);
+                        }
+
+                        if(lineCommandList.size() > 0) {
+                            commandInterpreter.executeFileCommands(lineCommandList);
+                        }
+                        else {
+                            System.out.println("Empty file/ unable to process. Check your input.");
+                        }
+                    } else if(input.equalsIgnoreCase("exit")) {
+                        System.exit(0);
+                        scanner.close();
+                    } else {
+                        lineCommandList.add(processInputFile(input));
+                        commandInterpreter.executeFileCommands(lineCommandList);
+                    }
+                }
+            } catch (Exception exception) {
+                System.out.println(exception.getMessage());
+            } finally {
+                if(bufferedReader != null)
+                    bufferedReader.close();
+                if(fileReader != null)
+                    fileReader.close();
             }
 
-            if(lineCommandList.size() > 0) {
-                commandInterpreter.executeFileCommands(lineCommandList);
-                return "success";
-            }
-            else {
-                System.out.println("Empty file/ unable to process. Check your input.");
-                return "Blank input file";
-            }
-
-        } catch (Exception exception) {
-            System.out.println(exception.getMessage());
-            return "fail";
-        } finally {
-            if(bufferedReader != null)
-                bufferedReader.close();
-            if(fileReader != null)
-                fileReader.close();
-        }
     }
 
     private LineCommand processInputFile(String line) {
