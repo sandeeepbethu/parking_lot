@@ -4,6 +4,14 @@ plugins {
     id 'io.spring.dependency-management' version '1.0.7.RELEASE'
 }
 
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'com.gojek.assessment.ApplicationStart'
+        )
+    }
+}
+
 jar.enabled(true)
 group 'com.gojek.assessment'
 sourceCompatibility = 1.8
