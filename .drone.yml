@@ -1,0 +1,23 @@
+pipeline:
+
+  build_code:
+    when:
+      branch: master
+      event: [push, pull_request]
+    image: openjdk:8-jdk
+    commands:
+      - ./gradlew clean build
+
+  deploy_code_to_binrepo:
+    when:
+      branch: master
+      event: push
+    image: plugins/docker:latest
+    secrets: [ docker_username, docker_password ]
+    registry: docker.gojek.com
+    certificate_authority_url: http://browserconfig.gojek.com/gojek-certs/gojek-ca-bundle.crt
+    repo: docker.gojek.com/assessment/parkinglot/dev
+    tag:
+      - latest
+      - "b${DRONE_BUILD_NUMBER}-${DRONE_COMMIT:0:8}"
+    Dockerfile: Dockerfile
